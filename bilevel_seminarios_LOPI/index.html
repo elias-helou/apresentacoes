@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Apresentação Reveal.js Offline</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="reveal/dist/reveal.css">
+    <link rel="stylesheet" href="reveal/dist/theme/white.css">
+
+    <style>
+      .reveal h1,
+      .reveal h2 {
+        text-transform: none;
+      }
+
+      .reveal p,
+      .reveal li {
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- Slide 1 -->
+        <section>
+          <h1>Reveal.js Offline</h1>
+
+          <p>
+            Bundle local sem CDN e sem npm.
+          </p>
+        </section>
+
+        <!-- Slide 2 -->
+        <section>
+          <h2>Equação</h2>
+
+          \[
+          \min_x \frac12\|Ax-b\|^2 + \lambda TV(x)
+          \]
+        </section>
+
+        <!-- Slide 3 -->
+        <section>
+          <h2>Fragmentos</h2>
+
+          <p class="fragment">Primeiro ponto</p>
+          <p class="fragment">Segundo ponto</p>
+          <p class="fragment">Terceiro ponto</p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="reveal/dist/reveal.js"></script>
+    <script src="reveal/plugin/math/math.js"></script>
+
+    <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'slide',
+      plugins: [ RevealMath.MathJax3 ],
+      mathjax3: {
+        mathjax: 'mathjax/tex-svg.js',
+
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      }
+    });
+    </script>
+  </body>
+</html>
