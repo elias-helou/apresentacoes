@@ -163,34 +163,31 @@
             </div>
           </div>
         </section>
-
-      </section>
-
-      <section data-section>
-        <section id="otimizacao-bilevel-otimista">
-          <h2>Otimização Bilevel Otimista</h2>
-        </section>
-
         <section id="empate-cooperativo" class="content-slide">
           <div class="slide-layout">
             <h2>Resolvendo o empate cooperativamente</h2>
             <div class="slide-body">
-              <div class="fragment">
                 \[
                 \begin{aligned}
                   \max_{x, y}\quad &amp;( c_2 + x )y \\
                   \text{s. a:}\quad &amp; y \in \argmin_{z \in\{0, 1\}}\quad c_1( 1 - z ) + ( c_2 + x )z.
                 \end{aligned}
                 \]
-              </div>
               <ul>
+                <li class="fragment">O otimizador é \( ( x^*, y^* ) = ( c_1 - c_2, 1 ) \).</li>
                 <li class="fragment">Assumimos que o motorista irá preferir ir pela via pedagiada quando os custos são iguais.</li>
                 <li class="fragment">O modelo assume informação perfeita.</li>
                 <li class="fragment">Observe que o resultado seria o mesmo com \( z \in [0, 1] \).</li>
               </ul>
             </div>
           </div>
-          </section>
+        </section>
+      </section>
+
+      <section data-section>
+        <section id="otimizacao-bilevel-otimista">
+          <h2>Otimização Bilevel Otimista</h2>
+        </section>
 
         <section id="otimista" class="content-slide">
           <div class="slide-layout">
@@ -221,10 +218,13 @@
                   \begin{split}
                       \min_{\bm x, \bm y} & \quad f( \bm x, \bm y )\\
                       \text{s. a:}& \quad \bm x \in X\\
-                        & \quad \bm y \in \argmin_{\bm z \in Y( \bm x )} \quad g( \bm x, \bm z ).
+                        & \quad \bm y \in \mathcal F( \bm x ) = \argmin_{\bm z \in Y( \bm x )} \quad g( \bm x, \bm z ).
                   \end{split}
               \]
-            </div>
+            <ul>
+                <li class="fragment">Quando há empates para o seguidor, a líder decide .</li>
+                <li class="fragment">Na formulação geral, a líder pode influenciar o conjunto viável do seguidor.</li>
+              </ul></div>
           </div>
           <aside class="notes">Mostrar onde ocorre o empate na rede e como a resposta favorável afeta o objetivo.</aside>
         </section>
