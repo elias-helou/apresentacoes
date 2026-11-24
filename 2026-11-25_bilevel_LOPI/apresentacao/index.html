@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Otimização Bilevel entre o Otimismo e o Pessimismo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/white.css">
+  <style>
+    :root {
+      --r-background-color: #f7f6ef;
+      --r-main-color: #152c35;
+      --r-heading-color: #103d45;
+      --r-link-color: #176c65;
+      --r-main-font: system-ui, sans-serif;
+      --r-heading-font: system-ui, sans-serif;
+      --r-heading-text-transform: none;
+      --r-main-font-size: 34px;
+      --r-heading1-size: 2.15em;
+      --r-heading2-size: 1.55em;
+    }
+    .reveal .slides { text-align: left; }
+    .reveal .slides section { box-sizing: border-box; padding: 0 42px; }
+    .reveal .slides section.stack { padding: 0; }
+    .reveal .slides section.content-slide { height: 100%; }
+    .slide-layout {
+      display: grid;
+      height: 100%;
+      grid-template-rows: auto minmax(0, 1fr);
+      row-gap: 20px;
+    }
+    .reveal .slide-layout > h2 { margin: 0; }
+    .slide-body {
+      display: flow-root;
+      align-self: safe center;
+      min-width: 0;
+    }
+    .reveal .section-title h2 {
+      color: var(--r-background-color);
+      font-size: 2.6em;
+      line-height: 1.12;
+      max-width: 18ch;
+      margin: 0;
+    }
+    html.section-opening .reveal .controls,
+    html.section-opening .reveal .progress { color: #b0d8cc; }
+    .reveal h1 { max-width: 17ch; }
+    .reveal h1::before {
+      display: block;
+      width: 96px;
+      height: 7px;
+      margin-bottom: 32px;
+      background: var(--r-link-color);
+      content: "";
+    }
+    .reveal #capa,
+    .reveal #capa h1 { color: var(--r-background-color); }
+    .reveal #capa h1::before { background: #b0d8cc; }
+    .reveal li + li { margin-top: .5em; }
+    .reveal .meta { font-size: .72em; }
+    .reveal .referencias { font-size: .8em; line-height: 1.45; }
+    .reveal .referencias li + li { margin-top: 1.2em; }
+    .reveal .toll-network {
+      position: relative;
+      width: 560px;
+      max-width: 100%;
+      aspect-ratio: 208.667 / 117.975;
+      margin: 18px auto 0;
+      font-size: 28px;
+    }
+    .toll-network > svg { display: block; width: 100%; height: 100%; }
+    .network-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .network-origin { left: 9.30%; top: 49.25%; }
+    .network-destination { left: 90.68%; top: 49.25%; }
+    .network-upper { left: 50%; top: 6%; }
+    .network-lower { left: 50%; top: 94%; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <main class="slides">
+      <section id="capa">
+        <h1>Otimização Bilevel entre o Otimismo e o Pessimismo</h1>
+        <p>Elias Salomão Helou Neto</p>
+        <p class="meta">Grupo de Otimização e Problemas Inversos · 25 de novembro de 2026</p>
+      </section>
+
+      <section id="sumario" class="content-slide">
+        <div class="slide-layout">
+          <h2>Sumário</h2>
+          <div class="slide-body">
+            <ol id="lista-sumario"></ol>
+          </div>
+        </div>
+      </section>
+
+      <section data-section>
+        <section id="problema-do-pedagio">
+          <h2>O Problema do Pedágio</h2>
+        </section>
+
+        <section id="pedagios" class="content-slide">
+          <div class="slide-layout">
+            <h2>Uma rede de estradas com pedágios</h2>
+            <div class="slide-body">
+              <div class="fragment">
+              <figure class="toll-network" role="img"
+                      aria-label="Duas rotas da origem ao destino. A superior custa c₁. A inferior custa c₂ mais o pedágio x.">
+                <svg viewBox="0 0 208.667 117.975" aria-hidden="true">
+                  <path style="fill-rule:nonzero;fill:#f2f2f2;fill-opacity:1;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M -65.808835 -0.000561166 C -65.808835 10.621832 -74.4163 19.233209 -85.038693 19.233209 C -95.661087 19.233209 -104.272463 10.621832 -104.272463 -0.000561166 C -104.272463 -10.622955 -95.661087 -19.234331 -85.038693 -19.234331 C -74.4163 -19.234331 -65.808835 -10.622955 -65.808835 -0.000561166 Z M -65.808835 -0.000561166 " transform="matrix(0.998407,0,0,-0.998407,104.305545,58.104908)" />
+                  <path style="stroke:none;fill-rule:nonzero;fill:#f2f2f2;fill-opacity:1;" d="M 208.136719 58.105469 C 208.136719 47.652344 199.664062 39.179688 189.210938 39.179688 C 178.757812 39.179688 170.285156 47.652344 170.285156 58.105469 C 170.285156 68.558594 178.757812 77.03125 189.210938 77.03125 C 199.664062 77.03125 208.136719 68.558594 208.136719 58.105469 Z M 208.136719 58.105469 " />
+                  <path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M 103.996873 -0.000561166 C 103.996873 10.469245 95.510695 18.955423 85.040889 18.955423 C 74.571082 18.955423 66.084905 10.469245 66.084905 -0.000561166 C 66.084905 -10.470368 74.571082 -18.956545 85.040889 -18.956545 C 95.510695 -18.956545 103.996873 -10.470368 103.996873 -0.000561166 Z M 103.996873 -0.000561166 " transform="matrix(0.998407,0,0,-0.998407,104.305545,58.104908)" />
+                  <path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M -71.29805 13.740082 C -31.922814 53.115318 32.120633 52.919694 71.171134 13.869194 " transform="matrix(0.998407,0,0,-0.998407,104.305545,58.104908)" />
+                  <path style="fill:none;stroke-width:0.31879;stroke-linecap:round;stroke-linejoin:round;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M -1.19496 1.593479 C -1.095364 0.9959 0.000197937 0.0995311 0.298988 -0.0000654137 C 0.000197937 -0.0996619 -1.095364 -0.996031 -1.19496 -1.59361 " transform="matrix(0.705973,0.705973,0.705973,-0.705973,175.363188,44.257627)" />
+                  <path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M -71.29805 -13.741204 C -31.922814 -53.116441 32.120633 -52.920817 71.171134 -13.870316 " transform="matrix(0.998407,0,0,-0.998407,104.305545,58.104908)" />
+                  <path style="fill:none;stroke-width:0.31879;stroke-linecap:round;stroke-linejoin:round;stroke:currentColor;stroke-opacity:1;stroke-miterlimit:10;" d="M -1.195754 1.592816 C -1.096158 0.995237 -0.000595679 0.0988683 0.298194 -0.000728202 C -0.000595679 -0.100325 -1.096158 -0.996694 -1.195754 -1.594273 " transform="matrix(0.705973,-0.705973,-0.705973,-0.705973,175.363188,71.95219)" />
+                </svg>
+                <span class="network-label network-origin" aria-hidden="true">Orig.</span>
+                <span class="network-label network-destination" aria-hidden="true">Dest.</span>
+                <span class="network-label network-upper" aria-hidden="true">\(c_1\)</span>
+                <span class="network-label network-lower" aria-hidden="true">\(c_2+x\)</span>
+              </figure>
+              </div><br>
+              <ul>
+                <li class="fragment">A autoridade define os pedágios \(x\).</li>
+                <li class="fragment">O motorista escolhe a rota de acordo com o custo da viagem.</li>
+                <li class="fragment">Como a autoridade decide o valor do pedágio?</li>
+              </ul>
+              <!-- Traçados obtidos do TikZ da Figura 6 de projeto.tex, com rótulos HTML/MathJax. -->
+            </div>
+          </div>
+
+          <aside class="notes">Figura adaptada do TikZ de projeto.tex, Figura 6. Os custos das rotas são c₁ e c₂ + x. O empate ocorre em x = c₁ − c₂.</aside>
+        </section>
+
+        <section id="resposta" class="content-slide">
+          <div class="slide-layout">
+            <h2>Modelando o problema do pedágio</h2>
+            <div class="slide-body">
+              <ul>
+                <li class="fragment">
+                  A autoridade deseja maximizar o lucro:
+                  \[
+                    \max_{x \in \mathbb R}\quad ( c_2 + x )y.
+                  \]
+                </li>
+                <li class="fragment">
+                  \( y \) é uma variável controlada pelo motorista:
+                  \[
+                    y = \argmin_{z \in\{0, 1\}}\quad c_1( 1 - z ) + ( c_2 + x )z.
+                  \]
+                </li>
+                <li class="fragment">
+                  \( y \) não está bem definida quando \( c_1 = c_2 + x \).
+                </li>
+                <li class="fragment">Observe que a dificuldade seria a mesma com \( z \in [0, 1] \).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      <section data-section>
+        <section id="otimizacao-bilevel-otimista">
+          <h2>Otimização Bilevel Otimista</h2>
+        </section>
+
+        <section id="empate-cooperativo" class="content-slide">
+          <div class="slide-layout">
+            <h2>Resolvendo o empate cooperativamente</h2>
+            <div class="slide-body">
+              <div class="fragment">
+                \[
+                \begin{aligned}
+                  \max_{x, y}\quad &amp;( c_2 + x )y \\
+                  \text{s. a:}\quad &amp; y \in \argmin_{z \in\{0, 1\}}\quad c_1( 1 - z ) + ( c_2 + x )z.
+                \end{aligned}
+                \]
+              </div>
+              <ul>
+                <li class="fragment">Assumimos que o motorista irá preferir ir pela via pedagiada quando os custos são iguais.</li>
+                <li class="fragment">O modelo assume informação perfeita.</li>
+                <li class="fragment">Observe que o resultado seria o mesmo com \( z \in [0, 1] \).</li>
+              </ul>
+            </div>
+          </div>
+          </section>
+
+        <section id="otimista" class="content-slide">
+          <div class="slide-layout">
+            <h2>Formulação otimista</h2>
+            <div class="slide-body">
+              <div class="fragment">
+              A formulação otimista de um problema de otimização em dois níveis pode ser escrita como:
+              \[\tag{$\mathscr{O}$}\label{eq_optimistic}
+                  \begin{split}
+                      \min_{\bm x, \bm y} & \quad f( \bm x, \bm y )\\
+                      \text{s. a:}& \quad \bm x \in X\\
+                        & \quad \bm y \in \mathcal F( \bm x ),
+                  \end{split}
+              \]
+              onde $\mathcal F( \bm x )$ é o conjunto de respostas racionais, definido como se segue:
+              \[
+                \mathcal F( \bm x ) := \argmin_{\bm y \in Y( \bm x )} \quad g( \bm x, \bm y ).
+              \]
+              </div>
+            </div>
+          </div>
+          <aside class="notes">Mostrar onde ocorre o empate na rede e como a resposta favorável afeta o objetivo.</aside>
+        </section>
+
+        <section id="otimista-comment" class="content-slide">
+          <div class="slide-layout">
+            <h2>Formulação otimista</h2>
+            <div class="slide-body">
+              \[
+                  \begin{split}
+                      \min_{\bm x, \bm y} & \quad f( \bm x, \bm y )\\
+                      \text{s. a:}& \quad \bm x \in X\\
+                        & \quad \bm y \in \argmin_{\bm y \in Y( \bm x )} \quad g( \bm x, \bm y ).
+                  \end{split}
+              \]
+            </div>
+          </div>
+          <aside class="notes">Mostrar onde ocorre o empate na rede e como a resposta favorável afeta o objetivo.</aside>
+        </section>
+
+        <section id="pessimista" class="content-slide">
+          <div class="slide-layout">
+            <h2>Formulação pessimista</h2>
+            <div class="slide-body">
+              \[
+                \inf_{x\in X}\ \sup_{y\in S(x)} F(x,y).
+              \]
+              <p>A autoridade avalia cada escolha de pedágios pelo pior resultado entre as respostas ótimas dos motoristas.</p>
+            </div>
+          </div>
+          <aside class="notes">Usar o exemplo para mostrar a dificuldade que surge no ponto de empate e discutir se o ínfimo é atingido.</aside>
+        </section>
+
+        <section id="probabilistico" class="content-slide">
+          <div class="slide-layout">
+            <h2>Modelo probabilístico</h2>
+            <div class="slide-body">
+              <p>A abordagem de Mallozzi e Morgan considera uma distribuição sobre as respostas ótimas. A avaliação passa a depender de uma esperança. <a href="#/referencias" aria-label="Referência 1, Mallozzi e Morgan, 1996">[1]</a></p>
+              \[
+                \mathbb{E}_{y\sim \mu_x}\bigl[F(x,y)\bigr].
+              \]
+              <p>No exemplo dos pedágios, as dificuldades persistem.</p>
+            </div>
+          </div>
+          <aside class="notes">Explicitar a distribuição usada no exemplo e mostrar o comportamento do objetivo esperado.</aside>
+        </section>
+
+        <section id="racionalidade" class="content-slide">
+          <div class="slide-layout">
+            <h2>Racionalidade limitada</h2>
+            <div class="slide-body">
+              <p>Na abordagem de Wiesemann e colaboradores <a href="#/referencias" aria-label="Referência 2, Wiesemann e colaboradores, 2013">[2]</a>, a autoridade leva em conta respostas próximas do ótimo. Uma forma de representar a tolerância é</p>
+              \[
+                S_\varepsilon(x)=
+                \left\{y\in Y(x): f(x,y)\leq \inf_{z\in Y(x)}f(x,z)+\varepsilon\right\}.
+              \]
+              <p>No exemplo, a abordagem recupera a existência de soluções. Quando \(\varepsilon\to 0^+\), recupera-se, no limite, a solução otimista.</p>
+            </div>
+          </div>
+          <aside class="notes">Apresentar a derivação do limite usando a rede de pedágios.</aside>
+        </section>
+
+        <section id="heterogeneo" class="content-slide">
+          <div class="slide-layout">
+            <h2>Modelo com rebanho heterogêneo</h2>
+            <div class="slide-body">
+              <p>A proposta combina a abordagem probabilística com a racionalidade limitada para representar a heterogeneidade entre os motoristas.</p>
+            </div>
+          </div>
+          <aside class="notes">Especificar como o modelo representa os grupos e aplicar a formulação à mesma rede.</aside>
+        </section>
+
+        <section id="discussao" class="content-slide">
+          <div class="slide-layout">
+            <h2>Questões em aberto</h2>
+            <div class="slide-body">
+              <ul>
+                <li>Em que condições a racionalidade limitada garante existência de soluções?</li>
+                <li>Quando o limite à medida que a tolerância tende a zero recupera a solução otimista?</li>
+                <li>Como a heterogeneidade das respostas afeta essas propriedades?</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section data-section>
+        <section id="bibliografia">
+          <h2>Bibliografia</h2>
+        </section>
+
+        <section id="referencias" class="content-slide">
+          <div class="slide-layout">
+            <h2>Referências</h2>
+            <div class="slide-body">
+              <ol class="referencias">
+                <li id="ref-mallozzi-1996">
+                  Mallozzi, Lina e Morgan, Jacqueline.
+                  Hierarchical Systems with Weighted Reaction Set.
+                  Em G. Di Pillo e F. Giannessi (orgs.),
+                  <em>Nonlinear Optimization and Applications</em>.
+                  Boston, MA, Springer US, 1996, p. 271–282.
+                  <a href="https://doi.org/10.1007/978-1-4899-0289-4_19">DOI 10.1007/978-1-4899-0289-4_19</a>.
+                </li>
+                <li id="ref-wiesemann-2013">
+                  Wiesemann, Wolfram, Tsoukalas, Angelos, Kleniati, Polyxeni-Margarita e Rustem, Berç.
+                  Pessimistic Bilevel Optimization.
+                  <em>SIAM Journal on Optimization</em>, v. 23, n. 1, p. 353–380, 2013.
+                  <a href="https://doi.org/10.1137/120864015">DOI 10.1137/120864015</a>.
+                </li>
+              </ol>
+            </div>
+          </div>
+          <aside class="notes">Dados bibliográficos extraídos de total.bib, entradas mallozzi_1996 e wiesemann_2013.</aside>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/math/math.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+  <script>
+    // Cada grupo data-section contribui com o título e o link de seu slide de abertura.
+    const sumario = document.querySelector('#lista-sumario');
+    const corDeSecao = getComputedStyle(document.documentElement)
+      .getPropertyValue('--r-heading-color').trim();
+    const capa = document.querySelector('#capa');
+    capa.dataset.backgroundColor = corDeSecao;
+    capa.dataset.state = 'section-opening';
+    document.querySelectorAll('.slides > section[data-section]').forEach(secao => {
+      const abertura = secao.querySelector(':scope > section');
+      abertura.classList.add('section-title', 'center');
+      abertura.dataset.backgroundColor = corDeSecao;
+      abertura.dataset.state = 'section-opening';
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.textContent = abertura.querySelector('h2').textContent;
+      link.href = `#/${abertura.id}`;
+      item.append(link);
+      sumario.append(item);
+    });
+
+    Reveal.initialize({
+      center: false,
+      width: 1200,
+      height: 675,
+      hash: true,
+      slideNumber: true,
+      transition: 'fade',
+      navigationMode: 'linear',
+      mathjax3: {
+        mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js',
+        tex: {
+          macros: {
+            argmin: '\\operatorname*{arg\\,min}',
+            bm: ['\\boldsymbol{#1}', 1]
+          }
+        }
+      },
+      plugins: [RevealMath.MathJax3, RevealNotes]
+    });
+  </script>
+</body>
+</html>
