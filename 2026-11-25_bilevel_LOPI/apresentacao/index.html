@@ -196,7 +196,6 @@
           <div class="slide-layout">
             <h2>Formulação otimista</h2>
             <div class="slide-body">
-              <div class="fragment">
               A formulação otimista de um problema de otimização em dois níveis pode ser escrita como:
               \[\tag{$\mathscr{O}$}\label{eq_optimistic}
                   \begin{split}
@@ -209,7 +208,6 @@
               \[
                 \mathcal F( \bm x ) := \argmin_{\bm y \in Y( \bm x )} \quad g( \bm x, \bm y ).
               \]
-              </div>
             </div>
           </div>
           <aside class="notes">Mostrar onde ocorre o empate na rede e como a resposta favorável afeta o objetivo.</aside>
@@ -223,7 +221,7 @@
                   \begin{split}
                       \min_{\bm x, \bm y} & \quad f( \bm x, \bm y )\\
                       \text{s. a:}& \quad \bm x \in X\\
-                        & \quad \bm y \in \argmin_{\bm y \in Y( \bm x )} \quad g( \bm x, \bm y ).
+                        & \quad \bm y \in \argmin_{\bm z \in Y( \bm x )} \quad g( \bm x, \bm z ).
                   \end{split}
               \]
             </div>
