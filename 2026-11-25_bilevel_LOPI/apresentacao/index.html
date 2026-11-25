@@ -150,7 +150,7 @@
                   <li class="fragment">
                     A autoridade deseja maximizar o lucro:
                     \[
-                      \max_{x \in \mathbb R}\quad ( c_2 + x )y.
+                      \max_{x \in \mathbb R}\quad xy.
                     \]
                   </li>
                   <li class="fragment">
@@ -174,7 +174,7 @@
               <div class="slide-body">
                 \[
                   \begin{aligned}
-                    \max_{x, y}\quad &amp;( c_2 + x )y \\
+                    \max_{x, y}\quad &amp; xy \\
                     \st\quad &amp; y \in \argmin_{z \in\{0, 1\}}\quad c_1( 1 - z ) + ( c_2 + x )z.
                   \end{aligned}
                 \]
@@ -290,7 +290,7 @@
                 A formulação pessimista do problema do pedágio fica
                 \[
                   \begin{aligned}
-                    \max_{x}\min_{y}\quad &amp;( c_2 + x )y \\
+                    \max_{x}\min_{y}\quad &amp; xy \\
                     \st\quad &amp; y \in \argmin_{z \in\{0, 1\}}\quad c_1( 1 - z ) + ( c_2 + x )z.
                   \end{aligned}
                 \]
@@ -311,9 +311,9 @@
                   \[
                     \mathcal F( x ) =
                     \begin{cases}
-                      \{ 1 \} &amp;\text{se } x < c_1 - c_2\\
-                      \{ 0, 1 \} &amp;\text{se } x = c_1 - c_2\\
-                      \{ 0 \} &amp;\text{se } x > c_1 - c_2.
+                      \{ 1 \} &amp;\text{se } c_2 + x < c_1\\
+                      \{ 0, 1 \} &amp;\text{se } c_2 + x = c_1\\
+                      \{ 0 \} &amp;\text{se } c_2 + x > c_1.
                     \end{cases}
                   \]
                 </li>
@@ -321,8 +321,8 @@
                   \[
                     \mathcal P( x ) =
                     \begin{cases}
-                      \{ 1 \} &amp;\text{se } x < c_1 - c_2\\
-                      \{ 0 \} &amp;\text{se } x \ge c_1 - c_2.
+                      \{ 1 \} &amp;\text{se } c_2 + x < c_1\\
+                      \{ 0 \} &amp;\text{se } c_2 + x \ge c_1.
                     \end{cases}
                   \]
                 </li>
@@ -330,8 +330,8 @@
                   \[
                     f( x ) =
                     \begin{cases}
-                      c_2 + x &amp;\text{se } x < c_1 - c_2\\
-                      0 &amp;\text{se } x \ge c_1 - c_2.
+                      x &amp;\text{se } c_2 + x < c_1\\
+                      0 &amp;\text{se } c_2 + x \ge c_1.
                     \end{cases}
                   \]
                 </li>
@@ -354,7 +354,7 @@
               <div class="slide-body">
                 <p>
                   Mallozzi e Morgan <a href="#/referencias" aria-label="Referência 1, Mallozzi e Morgan, 1996">[1]</a> consideram uma abordagem intermediária:
-                  \begin{equation}\tag{$\mathscr{I}$}\label{eq_intermediate}
+                  \begin{equation}\tag{$\mathscr{W}$}\label{eq_weighted}
                       \begin{split}
                           \min_{\bm x} & \quad F( \bm x ) := \int_{\mathcal F( \bm x )} f( \bm x, \bm y )\mathrm d\mu_{\bm x}\\
                           \st & \quad \bm x \in X,
@@ -379,7 +379,7 @@
               <div class="slide-body">
                 A formulação ponderada do problema do pedágio fica
                 \[
-                    \max_{x}\quad F( x ) = \int_{\mathcal F( x )}( c_2 + x )y\mathrm d\mu_{x}
+                    \max_{x}\quad F( x ) = \int_{\mathcal F( x )}xy\mathrm d\mu_{x}
                 \]
                 com
                 \[
@@ -403,9 +403,9 @@
                   \[
                     \mathcal F( x ) =
                     \begin{cases}
-                      \{ 1 \} &amp;\text{se } x < c_1 - c_2\\
-                      \{ 0, 1 \} &amp;\text{se } x = c_1 - c_2\\
-                      \{ 0 \} &amp;\text{se } x > c_1 - c_2.
+                      \{ 1 \} &amp;\text{se } c_2 + x < c_1\\
+                      \{ 0, 1 \} &amp;\text{se } c_2 + x = c_1\\
+                      \{ 0 \} &amp;\text{se } c_2 + x > c_1.
                     \end{cases}
                   \]
                 </li>
@@ -413,9 +413,9 @@
                   \[
                     F( x ) = 
                     \begin{cases}
-                      c_2 + x &amp;\text{se } x < c_1 - c_2\\
-                      ( c_2 + x )\alpha &amp;\text{se } x = c_1 - c_2\\
-                      0 &amp;\text{se } x > c_1 - c_2.
+                      x &amp;\text{se } c_2 + x < c_1\\
+                      x\alpha &amp;\text{se } c_2 + x = c_1\\
+                      0 &amp;\text{se } c_2 + x > c_1.
                     \end{cases}
                   \]
                 </li>
@@ -437,28 +437,140 @@
 
           <section id="racionalidade" class="content-slide">
             <div class="slide-layout">
-              <h2>Racionalidade limitada</h2>
+              <h2>Formulação com racionalidade limitada</h2>
               <div class="slide-body">
-                <p>Wiesemann <em>et al.</em> <a href="#/referencias" aria-label="Referência 2, Wiesemann e colaboradores, 2013">[2]</a> introduziram a ideia de racionalidade limitada.</p>
-                \[
-                  S_\varepsilon(x)=
-                  \left\{y\in Y(x): f(x,y)\leq \inf_{z\in Y(x)}f(x,z)+\varepsilon\right\}.
-                \]
-                <p>No exemplo, a abordagem recupera a existência de soluções. Quando \(\varepsilon\to 0^+\), recupera-se, no limite, a solução otimista.</p>
+                <p>
+                  \[\tag{$\mathscr{P_\epsilon}$}\label{eq_wies}
+                    \begin{align}
+                      \min_{\bm x, \bm y} \quad & f( \bm x, \bm y )\\
+                      \st \quad & \bm x \in X\\
+                                & \bm y \in \mathcal P_\epsilon( \bm x ),
+                    \end{align}
+                  \] onde
+                <ul>
+                  <li class="fragment">
+                    \[
+                      g( \bm x ) := \min_{\bm y \in Y( \bm x )} g( \bm x, \bm y ).
+                    \]
+                  </li>
+                  <li class="fragment">
+                    \[
+                      \mathcal F_\epsilon( \bm x ) := \{ \bm y \in Y( \bm x ) : g( \bm x, \bm y ) \le g( \bm x ) + \epsilon \}.
+                    \]
+                  </li>
+                  <li class="fragment">
+                    \[
+                      \mathcal P_\epsilon( \bm x ) := \argmax_{\bm y \in \mathcal F_\epsilon( \bm x )}\quad f( \bm x, \bm y ).
+                    \]
+                  </li>
+                </ul>
+                </p>
+              </div>
+            </div>
+            <aside class="notes">Apresentar a derivação do limite usando a rede de pedágios.</aside>
+          </section>
+
+          <section id="empate-irracional" class="content-slide">
+            <div class="slide-layout">
+              <h2>Resolvendo o empate com racionalidade limitada</h2>
+              <div class="slide-body">
+                <ul>
+                  <li class="fragment">
+                    \[
+                      g( x ) + \epsilon =
+                      \begin{cases}
+                        \epsilon + c_2 + x &amp;\text{se } c_2 + x < c_1\\
+                        \epsilon + c_1 &amp;\text{se } c_2 + x \ge c_1.
+                      \end{cases}
+                    \]
+                  </li>
+                  <li class="fragment">
+                    \[
+                      \mathcal F_\epsilon( x ) =
+                      \begin{cases}
+                        \{ 1 \} &amp;\text{se } c_2 + x \le c_1 - \epsilon\\
+                        \{ 0 \} &amp;\text{se } c_2 + x \ge c_1 + \epsilon\\
+                        \{ 0, 1 \} &amp;\text{caso contrário}.
+                      \end{cases}
+                    \]
+                  </li>
+                  <li class="fragment">
+                    \[
+                      \mathcal P_\epsilon( x ) =
+                      \begin{cases}
+                        \{ 1 \} &amp;\text{se } c_2 + x \le c_1 - \epsilon\\
+                        \{ 0 \} &amp;\text{se } c_2 + x \ge c_1 + \epsilon\\
+                        \{ 0 \} &amp;\text{caso contrário}.
+                      \end{cases}
+                    \]
+                  </li>
+                  <li class="fragment">O otimizador existe para todo $\epsilon > 0$.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+       
+          <section id="racionalidade-propriedades" class="content-slide">
+            <div class="slide-layout">
+              <h2>Propriedades da formulação com racionalidade limitada</h2>
+              <div class="slide-body">
+                <p>Wiesemann <em>et al.</em> <a href="#/referencias" aria-label="Referência 2, Wiesemann e colaboradores, 2013">[2]</a> introduziram a ideia e mostraram algumas propriedades.</p>
+                <ul>
+                  <li class="fragment">Se $Y( \bm x ) \equiv Y$ e $\epsilon > 0$, então uma solução existe.</li>
+                  <li class="fragment">Com \( \epsilon = 0 \) temos o caso pessimista.</li>
+                  <li class="fragment">O limite para $\epsilon \to 0^+$ existe.</li>
+                  <li class="fragment">Entretanto, nosso exemplo mostra que o limite para $\epsilon \to 0^+$ pode ser igual à solução otimista.</li>
+                </ul>
               </div>
             </div>
             <aside class="notes">Apresentar a derivação do limite usando a rede de pedágios.</aside>
           </section>
         </section>
 
+        <section data-section>
+          <section id="otimizacao-bilevel-ip">
+            <h2>Otimização Bilevel com Ponderação e Irracionalidade</h2>
+          </section>
+
           <section id="heterogeneo" class="content-slide">
             <div class="slide-layout">
-              <h2>Modelo com rebanho heterogêneo</h2>
+              <h2>Formulação com ponderação e racionalidade limitada</h2>
               <div class="slide-body">
-                <p>A proposta combina a abordagem probabilística com a racionalidade limitada para representar a heterogeneidade entre os motoristas.</p>
+                A fim de aumentar o poder de modelagem e obter mais possibilidades teóricas, propomos um modelo que une a ponderação com a irracionalidade limitada:
+                \[\tag{$\mathscr{W}_\epsilon$}\label{eq_wi}
+                    \begin{split}
+                        \min_{\bm x} & \quad A( \bm x ) := \int_{\mathcal F_\epsilon( \bm x )} f( \bm x, \bm y )\mathrm d\mu_{\bm x}\\
+                        \st & \quad \bm x \in X.
+                    \end{split}
+                  \]
               </div>
             </div>
             <aside class="notes">Especificar como o modelo representa os grupos e aplicar a formulação à mesma rede.</aside>
+          </section>
+
+          <section id="empate-irracional" class="content-slide">
+            <div class="slide-layout">
+              <h2>Resolvendo o empate com ponderação e racionalidade limitada</h2>
+              <div class="slide-body">
+                <ul>
+                  <li class="fragment">
+                  </li>
+                  <li class="fragment">
+                  </li>
+                  <li class="fragment">
+                  </li>
+                  <li class="fragment">
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section data-section>
+          <section id="otimizacao-bilevel-irracional">
+            <h2>Pesquisa Futura</h2>
           </section>
 
           <section id="discussao" class="content-slide">
@@ -466,13 +578,25 @@
               <h2>Questões em aberto</h2>
               <div class="slide-body">
                 <ul>
-                  <li>Em que condições a racionalidade limitada garante existência de soluções?</li>
-                  <li>Quando o limite à medida que a tolerância tende a zero recupera a solução otimista?</li>
-                  <li>Como a heterogeneidade das respostas afeta essas propriedades?</li>
+                  <li class="fragment">
+                    Determinar sob que condições temos
+                    \(
+                      \lim_{\epsilon \to 0^+}\mathscr P_\epsilon = \mathscr O
+                    \)
+                  </li>
+                  <li class="fragment">Quais propriedades teóricas podemos garantir para \( \mathscr W_\epsilon \)?
+                    <ul>
+                      <li class="fragment">Existência quando $Y( \bm s) \equiv Y$ e $\epsilon > 0$</li>
+                      <li class="fragment">Convergência para $\epsilon \to 0^+$</li>
+                      <li class="fragment">Comparação, no limite, $\mathcal W$, quando este tem solução.</li>
+                    </ul>
+                  </li>
+                  <li class="fragment">Dúvidas, comentários, sugestões?</li>
                 </ul>
               </div>
             </div>
           </section>
+        </section>
         
         <section data-section>
           <section id="bibliografia">
@@ -543,6 +667,7 @@
           tex: {
             macros: {
               argmin: '\\operatorname*{arg\\,min}',
+              argmax: '\\operatorname*{arg\\,max}',
               bm: ['\\boldsymbol{#1}', 1],
               st: '\\text{s. a:}'
             }
